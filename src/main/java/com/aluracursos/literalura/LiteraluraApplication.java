@@ -1,14 +1,20 @@
 package com.aluracursos.literalura;
 
 import com.aluracursos.literalura.principal.Principal;
+import com.aluracursos.literalura.repository.IRepositorioAutores;
+import com.aluracursos.literalura.repository.IRepositorioLibros;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = "com.aluracursos.literalura.repository")
 public class LiteraluraApplication implements CommandLineRunner {
+
+	@Autowired
+	private IRepositorioLibros repositorioLibros;	@Autowired
+	private IRepositorioAutores repositorioAutores;
 
 	public static void main(String[] args) {
 		SpringApplication.run(LiteraluraApplication.class, args);
@@ -16,7 +22,7 @@ public class LiteraluraApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Principal principal = new Principal();
+		Principal principal = new Principal(repositorioLibros, repositorioAutores);
 		principal.muestraElMenu();
 	}
 }

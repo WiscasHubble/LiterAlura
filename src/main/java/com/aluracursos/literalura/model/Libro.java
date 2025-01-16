@@ -28,8 +28,8 @@ public class Libro {
     @JsonProperty("download_count")
     private Integer descargas;
 
-    @ManyToOne
-    @JoinColumn(name = "autor_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "autor_id")
     private Autor autor;
 
 

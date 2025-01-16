@@ -1,7 +1,7 @@
 package com.aluracursos.literalura.principal;
 
+import com.aluracursos.literalura.model.Autor;
 import com.aluracursos.literalura.model.Libro;
-import com.aluracursos.literalura.model.LibroRecord;
 import com.aluracursos.literalura.repository.IRepositorioAutores;
 import com.aluracursos.literalura.repository.IRepositorioLibros;
 import com.aluracursos.literalura.services.ConsumoAPI;
@@ -10,10 +10,7 @@ import com.aluracursos.literalura.services.LibroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 @Component
 public class Principal {
@@ -21,9 +18,18 @@ public class Principal {
     ConsumoAPI consumoAPI = new ConsumoAPI();
     ConvertirDatos convertirDatos = new ConvertirDatos();
     LibroService libroService = new LibroService();
+    @Autowired
+    IRepositorioLibros repositorioLibros;
+    @Autowired
+    IRepositorioAutores repositorioAutores;
 
 
     String urlBase = "https://gutendex.com/books?";
+
+    public Principal(IRepositorioLibros repositorioLibros, IRepositorioAutores repositorioAutores) {
+        this.repositorioLibros = repositorioLibros;
+        this.repositorioAutores = repositorioAutores;
+    }
 
 
     public void muestraElMenu() {
@@ -84,9 +90,11 @@ public class Principal {
     }
 
 
-
     private void Prueba() {
-        libroService.obtenerPrimerLibro();
+        Libro libro = libroService.obtenerPrimerLibro();
+        Autor autor = libroService.obtenerAutor();
+        repositorioAutores.save(autor);
+        repositorioLibros.save(libro);
     }
 
 
