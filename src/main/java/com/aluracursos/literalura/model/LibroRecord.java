@@ -9,10 +9,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record LibroRecord(
         @JsonAlias("title") String titulo,
-        @JsonAlias("languages") List<String> idiomas,
+        @JsonAlias("languages") String idiomas,
         @JsonAlias("download_count") Integer descargas
-) {
-    public String getIdiomaPrincipal() {
-        return idiomas != null && !idiomas.isEmpty() ? idiomas.get(0) : "N/A";
-    }
-}
+) { }
+

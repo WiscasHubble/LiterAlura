@@ -1,29 +1,49 @@
 package com.aluracursos.literalura.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.OptionalDouble;
 
 @Entity
 @Table(name = "libro")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Libro {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonProperty("title")
     private String titulo;
 
-    @Enumerated(EnumType.STRING)
-    private Idioma idioma;
+    @JsonProperty("languages")
+    private List<String> idiomas;
 
+    @JsonProperty("download_count")
     private Integer descargas;
 
-    @ManyToOne
-    private Autor autor;
+    @ManyToMany
+    @JoinTable(
+            name = "libro_autor",
+            joinColumns = @JoinColumn(name = "libro_id"),
+            inverseJoinColumns = @JoinColumn(name = "autor_id")
+    )
+    @JsonAlias("authors")
+    private List<Autor> autores;
 
     public Libro(LibroRecord libroRecord) {
         this.titulo = libroRecord.titulo();
-        this.idioma = Idioma.fromIdiomaEspanol(libroRecord.getIdiomaPrincipal());
+        this.idiomas = Collections.singletonList(libroRecord.idiomas());
         this.descargas = libroRecord.descargas();
     }
+
+    public Libro() {}
 
     public Long getId() {
         return id;
@@ -41,12 +61,12 @@ public class Libro {
         this.titulo = titulo;
     }
 
-    public Idioma getIdioma() {
-        return idioma;
+    public List<String> getIdiomas() {
+        return idiomas;
     }
 
-    public void setIdioma(Idioma idioma) {
-        this.idioma = idioma;
+    public void setIdiomas(List<String> idiomas) {
+        this.idiomas = idiomas;
     }
 
     public Integer getDescargas() {
@@ -57,22 +77,22 @@ public class Libro {
         this.descargas = descargas;
     }
 
-    public Autor getAutor() {
-        return autor;
+    public List<Autor> getAutores() {
+        return autores;
     }
 
-    public void setAutor(Autor autor) {
-        this.autor = autor;
+    public void setAutores(List<Autor> autores) {
+        this.autores = autores;
     }
 
     @Override
     public String toString() {
-        return "Libro{" +
+        return "Libro encontrado: " +
                 "id=" + id +
                 ", titulo='" + titulo + '\'' +
-                ", idioma=" + idioma +
+                ", idiomas=" + idiomas +
                 ", descargas=" + descargas +
-                ", autor=" + autor +
-                '}';
+                ", autores=" + autores;
     }
 }
+

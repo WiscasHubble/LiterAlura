@@ -1,25 +1,34 @@
 package com.aluracursos.literalura.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "autor")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Autor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonProperty("name")
     private String nombre;
 
-    private LocalDate nacimiento;
+    @JsonProperty("birth_year")
+    @Column(name = "nacimiento", columnDefinition = "INTEGER")
+    private Integer nacimiento;
 
-    private LocalDate fallecimiento;
+    @JsonProperty("death_year")
+    @Column(name = "fallecimiento", columnDefinition = "INTEGER")
+    private Integer fallecimiento;
 
-    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Libro> libros;
+    @OneToMany(mappedBy = "autores", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Libro> libro = new ArrayList<>();
+
 
     public Long getId() {
         return id;
@@ -37,27 +46,32 @@ public class Autor {
         this.nombre = nombre;
     }
 
-    public LocalDate getNacimiento() {
+    public Integer getNacimiento() {
         return nacimiento;
     }
 
-    public void setNacimiento(LocalDate nacimiento) {
+    public void setNacimiento(Integer nacimiento) {
         this.nacimiento = nacimiento;
     }
 
-    public LocalDate getFallecimiento() {
+    public Integer getFallecimiento() {
         return fallecimiento;
     }
 
-    public void setFallecimiento(LocalDate fallecimiento) {
+    public void setFallecimiento(Integer fallecimiento) {
         this.fallecimiento = fallecimiento;
     }
 
-    public List<Libro> getLibros() {
-        return libros;
+    public List<Libro> getLibro() {
+        return libro;
     }
 
-    public void setLibros(List<Libro> libros) {
-        this.libros = libros;
+    public void setLibro(List<Libro> libro) {
+        this.libro = libro;
+    }
+
+    @Override
+    public String toString() {
+        return nombre;
     }
 }
