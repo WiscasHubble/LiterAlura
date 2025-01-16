@@ -13,7 +13,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 public class LiteraluraApplication implements CommandLineRunner {
 
 	@Autowired
-	private IRepositorioLibros repositorioLibros;	@Autowired
+	private IRepositorioLibros repositorioLibros;
+	@Autowired
 	private IRepositorioAutores repositorioAutores;
 
 	public static void main(String[] args) {

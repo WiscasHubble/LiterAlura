@@ -21,14 +21,15 @@ public class LibroService {
     @Autowired
     IRepositorioAutores repositorioAutores;
 
-    private static final String API_URL = "https://gutendex.com/books/";
 
 
 
-    public Libro obtenerPrimerLibro() {
+
+    public Libro obtenerPrimerLibro(String json) {
         try {
             // Simulamos la respuesta de la API
-            String jsonResponse = "[{\"id\":61851,\"title\":\"El crimen y el castigo\",\"authors\":[{\"name\":\"Dostoyevsky, Fyodor\",\"birth_year\":1821,\"death_year\":1881}],\"translators\":[{\"name\":\"Pedraza y Páez, Pedro\",\"birth_year\":1877,\"death_year\":null}],\"subjects\":[\"Crime -- Psychological aspects -- Fiction\",\"Detective and mystery stories\",\"Murder -- Fiction\",\"Psychological fiction\",\"Saint Petersburg (Russia) -- Fiction\"],\"bookshelves\":[\"Browsing: Crime/Mystery\",\"Browsing: Fiction\",\"Browsing: Literature\",\"Browsing: Psychiatry/Psychology\"],\"languages\":[\"es\"],\"copyright\":false,\"media_type\":\"Text\",\"formats\":{\"text/plain\":\"https://www.gutenberg.org/ebooks/61851.txt.utf-8\",\"text/html\":\"https://www.gutenberg.org/ebooks/61851.html.images\",\"text/html; charset=iso-8859-1\":\"https://www.gutenberg.org/files/61851/61851-h/61851-h.htm\",\"application/epub+zip\":\"https://www.gutenberg.org/ebooks/61851.epub3.images\",\"application/x-mobipocket-ebook\":\"https://www.gutenberg.org/ebooks/61851.kf8.images\",\"application/rdf+xml\":\"https://www.gutenberg.org/ebooks/61851.rdf\",\"image/jpeg\":\"https://www.gutenberg.org/cache/epub/61851/pg61851.cover.medium.jpg\",\"application/octet-stream\":\"https://www.gutenberg.org/cache/epub/61851/pg61851-h.zip\"},\"download_count\":1827}]";
+            String jsonResponse = json;
+
 
             // Inicializamos el ObjectMapper de Jackson
             ObjectMapper objectMapper = new ObjectMapper();
@@ -48,21 +49,14 @@ public class LibroService {
             List<String> idiomas = libroRecord.idiomas();  // Ya es una lista de strings
             libro.setIdiomas(idiomas);
 
-            // Obtener los autores desde el JSON
-            List<Autor> autores = new ArrayList<>();
-            for (var author : libroRecords.get(0).authors()) {
-                Autor autor = new Autor();
-                autor.setNombre(author.name());
-                autor.setNacimiento(author.birth_year());
-                autor.setFallecimiento(author.death_year());
-                autores.add(autor);
-            }
+            // Obtener los autores desde la funcion
+            Autor autor = obtenerAutor(json);
 
             // Asignamos los autores al libro
-            libro.setAutor(autores.get(0));
+            libro.setAutor(autor);
 
             System.out.println(libro);
-            System.out.println(autores);
+//            System.out.println(autores);
 
             return libro;
 
@@ -72,10 +66,10 @@ public class LibroService {
         return null;
     }
 
-    public Autor obtenerAutor(){
+    public Autor obtenerAutor(String json){
         try {
             // Simulamos la respuesta de la API
-            String jsonResponse = "[{\"id\":61851,\"title\":\"El crimen y el castigo\",\"authors\":[{\"name\":\"Dostoyevsky, Fyodor\",\"birth_year\":1821,\"death_year\":1881}],\"translators\":[{\"name\":\"Pedraza y Páez, Pedro\",\"birth_year\":1877,\"death_year\":null}],\"subjects\":[\"Crime -- Psychological aspects -- Fiction\",\"Detective and mystery stories\",\"Murder -- Fiction\",\"Psychological fiction\",\"Saint Petersburg (Russia) -- Fiction\"],\"bookshelves\":[\"Browsing: Crime/Mystery\",\"Browsing: Fiction\",\"Browsing: Literature\",\"Browsing: Psychiatry/Psychology\"],\"languages\":[\"es\"],\"copyright\":false,\"media_type\":\"Text\",\"formats\":{\"text/plain\":\"https://www.gutenberg.org/ebooks/61851.txt.utf-8\",\"text/html\":\"https://www.gutenberg.org/ebooks/61851.html.images\",\"text/html; charset=iso-8859-1\":\"https://www.gutenberg.org/files/61851/61851-h/61851-h.htm\",\"application/epub+zip\":\"https://www.gutenberg.org/ebooks/61851.epub3.images\",\"application/x-mobipocket-ebook\":\"https://www.gutenberg.org/ebooks/61851.kf8.images\",\"application/rdf+xml\":\"https://www.gutenberg.org/ebooks/61851.rdf\",\"image/jpeg\":\"https://www.gutenberg.org/cache/epub/61851/pg61851.cover.medium.jpg\",\"application/octet-stream\":\"https://www.gutenberg.org/cache/epub/61851/pg61851-h.zip\"},\"download_count\":1827}]";
+            String jsonResponse = json;
 
             // Inicializamos el ObjectMapper de Jackson
             ObjectMapper objectMapper = new ObjectMapper();
@@ -97,8 +91,6 @@ public class LibroService {
                 autores.add(autor);
             }
 
-
-            System.out.println(autores.get(0));
 
             return autores.get(0);
 

@@ -28,7 +28,7 @@ public class Libro {
     @JsonProperty("download_count")
     private Integer descargas;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "autor_id")
     private Autor autor;
 
@@ -78,11 +78,12 @@ public class Libro {
 
     @Override
     public String toString() {
-        return "Libro encontrado: " +
+        return "Libro: {" +
                 "titulo='" + titulo + '\'' +
                 ", idiomas=" + idiomas +
                 ", descargas=" + descargas +
-                ", autores=" + getAutor();
+                ", autor=" + getAutor()
+                +"}";
     }
 }
 

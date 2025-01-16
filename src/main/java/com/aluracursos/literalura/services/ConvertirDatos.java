@@ -25,12 +25,12 @@ public class ConvertirDatos implements IConvertirDatos  {
             JsonNode rootNode = mapper.readTree(json);
 
             // Imprimir todo el JSON para inspección
-            System.out.println("JSON completo recibido: " + rootNode.toString());
+//            System.out.println("JSON completo recibido: " + rootNode.toString());
 
             // Extraer el nodo "results"
             JsonNode resultsNode = rootNode.get("results");
 
-            System.out.println("json mapeado: " + resultsNode);
+//            System.out.println("json mapeado: " + resultsNode);
 
             if (resultsNode == null || resultsNode.isEmpty()) {
                 throw new RuntimeException("El nodo 'results' no existe o está vacío");
