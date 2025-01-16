@@ -23,25 +23,16 @@ public class Libro {
     private String titulo;
 
     @JsonProperty("languages")
-    private List<String> idiomas;
+    private String idiomas;
 
     @JsonProperty("download_count")
     private Integer descargas;
 
-    @ManyToMany
-    @JoinTable(
-            name = "libro_autor",
-            joinColumns = @JoinColumn(name = "libro_id"),
-            inverseJoinColumns = @JoinColumn(name = "autor_id")
-    )
-    @JsonAlias("authors")
-    private List<Autor> autores;
+    @ManyToOne
+    @JoinColumn(name = "autor_id", nullable = false)
+    private Autor autor;
 
-    public Libro(LibroRecord libroRecord) {
-        this.titulo = libroRecord.titulo();
-        this.idiomas = Collections.singletonList(libroRecord.idiomas());
-        this.descargas = libroRecord.descargas();
-    }
+
 
     public Libro() {}
 
@@ -62,11 +53,11 @@ public class Libro {
     }
 
     public List<String> getIdiomas() {
-        return idiomas;
+        return idiomas != null ? List.of(idiomas.split(",")) : List.of();
     }
 
     public void setIdiomas(List<String> idiomas) {
-        this.idiomas = idiomas;
+        this.idiomas = String.join(",", idiomas);
     }
 
     public Integer getDescargas() {
@@ -77,22 +68,21 @@ public class Libro {
         this.descargas = descargas;
     }
 
-    public List<Autor> getAutores() {
-        return autores;
+    public String getAutor() {
+        return autor.toString();
     }
 
-    public void setAutores(List<Autor> autores) {
-        this.autores = autores;
+    public void setAutor(Autor autor) {
+        this.autor = autor;
     }
 
     @Override
     public String toString() {
         return "Libro encontrado: " +
-                "id=" + id +
-                ", titulo='" + titulo + '\'' +
+                "titulo='" + titulo + '\'' +
                 ", idiomas=" + idiomas +
                 ", descargas=" + descargas +
-                ", autores=" + autores;
+                ", autores=" + getAutor();
     }
 }
 

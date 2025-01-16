@@ -2,6 +2,7 @@ package com.aluracursos.literalura.principal;
 
 import com.aluracursos.literalura.model.Libro;
 import com.aluracursos.literalura.model.LibroRecord;
+import com.aluracursos.literalura.repository.IRepositorioAutores;
 import com.aluracursos.literalura.repository.IRepositorioLibros;
 import com.aluracursos.literalura.services.ConsumoAPI;
 import com.aluracursos.literalura.services.ConvertirDatos;
@@ -13,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+
 @Component
 public class Principal {
     Scanner teclado = new Scanner(System.in);
@@ -81,53 +83,11 @@ public class Principal {
 
     }
 
-//    private Libro buscarLibrosPorTitulo() {
-//        System.out.println("Escribe el título del libro que deseas buscar:");
-//        String tituloLibro = teclado.nextLine();
-//        String url = urlBase + "search=" + tituloLibro.replace(" ", "%20");
-//
-//        var json = consumoAPI.obtenerDatos(url);
-//        System.out.println("Respuesta JSON: " + json);
-//
-//        if (json == null || json.isEmpty()) {
-//            throw new RuntimeException("La respuesta está vacía o nula.");
-//        }
-//
-//        var jsonProcesado = convertirDatos.extraerResultadosComoJson(json);
-//
-//        try {
-//            // Extraer la lista de libros (LibroRecord) del JSON procesado
-//            List<LibroRecord> librosRecord = convertirDatos.obtenerListaDatos(jsonProcesado, LibroRecord.class);
-//            System.out.println("Datos de LibroRecord:");
-//
-//            // Verificar si hay resultados y tomar solo el primero
-//            if (!librosRecord.isEmpty()) {
-//                LibroRecord primerLibroRecord = librosRecord.get(0); // Obtener el primer libro
-//
-//                // Mostrar el primer libro
-//                System.out.println("Primer libro encontrado: " + primerLibroRecord);
-//
-//                // Convertir el primer LibroRecord en un objeto Libro
-//                Libro libro = new Libro(primerLibroRecord);
-//
-//                // Guardar el libro en la base de datos
-////                LibroService libroService = new LibroService();
-////                libroService.guardarLibro(libro); // Guarda el libro en la base de datos
-//                System.out.println(libro);
-//
-//                return libro; // Retorna el libro guardado
-//            } else {
-//                throw new RuntimeException("No se encontraron libros.");
-//            }
-//        } catch (Exception e) {
-//            throw new RuntimeException("Error al intentar la búsqueda.", e);
-//        }
-//    }
 
-    private void Prueba(){
+
+    private void Prueba() {
         libroService.obtenerPrimerLibro();
     }
-
 
 
 }

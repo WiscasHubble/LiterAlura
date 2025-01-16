@@ -12,6 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,22 +20,13 @@ import java.util.List;
 public class LibroService {
     @Autowired
     private IRepositorioLibros librosRepositorio;
+
     @Autowired
     private IRepositorioAutores autoresRepositorio;
     private ConvertirDatos conversor = new ConvertirDatos();
 
-
     private static final String API_URL = "https://gutendex.com/books/";
 
-
-//    public List<Libro> convertirRecordsAEntidades(List<LibroRecord> librosRecord) {
-//        var debug = librosRecord.stream()
-//                .map(Libro::new) // Usa el constructor de Libro que acepta un LibroRecord
-//                .collect(Collectors.toList());
-//        System.out.println(debug);
-//
-//        return debug;
-//    }
 
 
     public Libro obtenerPrimerLibro() {
@@ -57,21 +49,24 @@ public class LibroService {
             libro.setDescargas(libroRecord.descargas());
 
             // Obtener el primer idioma de la lista y asignarlo al campo idioma
-            String idioma = libroRecord.idiomas(); // Ya es un String
+            List<String> idiomas = libroRecord.idiomas();  // Ya es una lista de strings
+            libro.setIdiomas(idiomas);
 
-            // Asignamos el primer idioma al libro como una lista de un solo idioma
-            libro.setIdiomas(Collections.singletonList(idioma));
+            // Obtener los autores desde el JSON
+            List<Autor> autores = new ArrayList<>();
+            for (var author : libroRecords.get(0).authors()) {
+                Autor autor = new Autor();
+                autor.setNombre(author.name());
+                autor.setNacimiento(author.birth_year());
+                autor.setFallecimiento(author.death_year());
+                autores.add(autor);
+            }
 
-            // Crear el objeto Autor (suponiendo que solo hay un autor)
-            Autor autor = new Autor();
-            autor.setNombre("Dostoyevsky, Fyodor");
-            autor.setNacimiento(1821);
-            autor.setFallecimiento(1881);
-
-            // Asignamos el autor al libro
-            libro.setAutores(List.of(autor));
+            // Asignamos los autores al libro
+            libro.setAutor(autores.get(0));
 
             System.out.println(libro);
+            System.out.println(autores);
 
             return libro;
 
@@ -82,17 +77,6 @@ public class LibroService {
     }
 
 
-    public Libro guardarLibro(Libro libro) {
-        // Guarda el libro junto con los autores si es necesario
-        for (Autor autor : libro.getAutores()) {
-            autoresRepositorio.save(autor);
-        }
-        return librosRepositorio.save(libro);
-    }
-
-    public Autor guardarAutor(Autor autor) {
-        return autoresRepositorio.save(autor);
-    }
 
 
 }

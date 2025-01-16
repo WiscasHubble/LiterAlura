@@ -26,8 +26,8 @@ public class Autor {
     @Column(name = "fallecimiento", columnDefinition = "INTEGER")
     private Integer fallecimiento;
 
-    @OneToMany(mappedBy = "autores", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Libro> libro = new ArrayList<>();
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Libro> libros = new ArrayList<>();
 
 
     public Long getId() {
@@ -62,12 +62,12 @@ public class Autor {
         this.fallecimiento = fallecimiento;
     }
 
-    public List<Libro> getLibro() {
-        return libro;
+    public List<Libro> getLibros() {
+        return libros;
     }
 
-    public void setLibro(List<Libro> libro) {
-        this.libro = libro;
+    public void setLibros(List<Libro> libros) {
+        this.libros = libros;
     }
 
     @Override
